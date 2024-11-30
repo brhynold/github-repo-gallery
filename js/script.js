@@ -5,6 +5,8 @@ const username = "brhynold";
 const repoList = document.querySelector(".repo-list");
 const repoSection = document.querySelector(".repos");
 const repoData = document.querySelector(".repo-data");
+const reposButton = document.querySelector(".view-repos");
+const filterInput = document.querySelector(".filter-repos");
 
 
 //Get user data from GitHub User API
@@ -43,7 +45,7 @@ const gitRepoData = async function() {
 };
 
 const displayRepos = function (repos) {
-
+  filterInput.classList.remove("hide");
   for (const repo of repos) {
   const repoItem = document.createElement("li");
   repoItem.classList.add("repo");
@@ -76,6 +78,7 @@ const getRepoInfo = async function (repoName) {
   displayRepoInfo(repoInfo, languages);
 };
 const displayRepoInfo = function (repoInfo, languages) {
+  reposButton.classList.remove("hide");
   repoData.innerHTML = "";
   repoData.classList.remove("hide");
   repoSection.classList.add("hide");
@@ -89,3 +92,27 @@ const displayRepoInfo = function (repoInfo, languages) {
   `;
   repoData.append(div);
 };
+
+//Allow users to navigate back to the Github Profile overview from the repo details page
+
+reposButton.addEventListener("click", function() {
+  repoSection.classList.remove("hide");
+  repoData.classList.add("hide");
+  reposButton.classList.add("hide");
+});
+
+//Let's add search functionality
+filterInput.addEventListener("input", function (e) {
+ const searchText = e.target.value;
+ const repos = document.querySelectorAll(".repo");
+ const searchLowerText = searchText.toLowerCase();
+
+ for (const repo of repos) {
+  const repoLowerText = repo.innerText.toLowerCase();
+ if (repoLowerText.includes(searchLowerText)) {
+  repo.classList.remove("hide");
+ } else {
+  repo.classList.add("hide");
+ }
+}
+});
