@@ -2,6 +2,7 @@
 //Target Profile Information overview class
 const profileOverview = document.querySelector(".overview");
 const username = "brhynold";
+const repoList = document.querySelector(".repo-list");
 
 //Get user data from GitHub User API
 const getUserData = async function () {
@@ -29,4 +30,21 @@ const displayProfileInfo = function (data) {
     </div> 
 `;
   profileOverview.append(div);  
+  getRepoData();
+};
+
+const getRepoData = async function() {
+  const repoData = await fetch (`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
+  const repos = await repoData.json();
+  displayRepos(repos);
+};
+
+const displayRepos = function (repos) {
+
+  for (const repo of repos) {
+  const repoItem = document.createElement("li");
+  repoItem.classList.add("repo");
+  repoItem.innerHTML = `<h3>${repo.name}</h3>`;
+  repoList.append(repoItem);
+}
 };
